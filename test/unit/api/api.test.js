@@ -110,10 +110,10 @@ describe('the New Relic agent API', function() {
   describe("when getting a transaction handle", function() {
     it("shoud return a stub when running outside of a transaction", function() {
       var handle = api.getTransaction()
-      expect(handle.end).to.be.a('function')
-      expect(handle.ignore).to.be.a('function')
-      expect(handle.createDistributedTracePayload).to.be.a('function')
-      expect(handle.acceptDistributedTracePayload).to.be.a('function')
+      expect(handle).property('end').to.be.a('function')
+      expect(handle).property('ignore').to.be.a('function')
+      expect(handle).property('createDistributedTracePayload').to.be.a('function')
+      expect(handle).property('acceptDistributedTracePayload').to.be.a('function')
 
       var payload = handle.createDistributedTracePayload()
       expect(payload.httpSafe).to.be.a('function')
