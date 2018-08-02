@@ -27,7 +27,8 @@ var used = [
   'reverse_naming_rules',
   'send_request_uri_attribute',
   'synthetics',
-  'unreleased',
+  'trace_context',
+  'unreleased'
 ]
 
 describe('feature flags', function() {
