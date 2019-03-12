@@ -12,6 +12,7 @@ const REQ_ID = 'aws.requestId'
 const LAMBDA_ARN = 'aws.lambda.arn'
 const COLDSTART = 'aws.lambda.coldStart'
 const EVENTSOURCE_ARN = 'aws.lambda.eventSource.arn'
+const TIMEOUT = 100
 
 describe('AwsLambda.patchLambdaHandler', () => {
   const groupName = 'Function'
@@ -54,6 +55,7 @@ describe('AwsLambda.patchLambdaHandler', () => {
       done: () => {},
       succeed: () => {},
       fail: () => {},
+      getRemainingTimeInMillis: () => TIMEOUT,
       functionName: functionName,
       functionVersion: 'TestVersion',
       invokedFunctionArn: 'arn:test:function',
@@ -792,6 +794,28 @@ describe('AwsLambda.patchLambdaHandler', () => {
         const data = noticedError[4]
         expect(data.stack_trace, 'stack_trace').to.exist
 
+        done()
+      }
+    })
+  })
+
+  describe('when timeout occurs', () => {
+    it('should end appropriately', (done) => {
+      let transaction
+
+      setTimeout(confirmEndCallback, TIMEOUT)
+
+      const wrappedHandler = awsLambda.patchLambdaHandler((event, context) => {
+        transaction = agent.tracer.getTransaction()
+      })
+
+      wrappedHandler(stubEvent, stubContext, stubCallback)
+
+      function confirmEndCallback() {
+        expect(transaction.isActive()).to.be.false
+
+        const currentTransaction = agent.tracer.getTransaction()
+        expect(currentTransaction).is.null
         done()
       }
     })
