@@ -1,5 +1,5 @@
 {
-  "name": "newrelic",
+  "name": "@ruguoapp/newrelic",
   "version": "5.9.0",
   "author": "New Relic Node.js agent team <nodejs@newrelic.com>",
   "license": "SEE LICENSE IN LICENSE",
